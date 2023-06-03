@@ -1,11 +1,16 @@
 import React, { useContext, useState } from "react";
+import { FaWallet } from 'react-icons/fa';
 // import { navLinks } from "../constants";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 // import { IoMdClose } from "react-icons/io";
 import { useNavigate ,Link} from "react-router-dom";
+import DataContext from "../Context/dataContext";
 
 function Navbar() {
   const navigate = useNavigate();
+  const data=useContext(DataContext);
+  const{url,checkLoggedIn,username}=data;
+  console.log(username);
   return (
     <>
 
@@ -19,7 +24,7 @@ function Navbar() {
         </div>
         <div className="flex flex-row">
           <ul className="list-none sm:flex flex-1 hidden justify-end items-center space-x-6">
-            <Link to="/home"className="font-poppins font-normal cursor-pointer text-[16px] text-slate-400 hover:text-white "> Home</Link>
+            <Link to="/"className="font-poppins font-normal cursor-pointer text-[16px] text-slate-400 hover:text-white "> Home</Link>
 
             <Link to="#"className="font-poppins font-normal cursor-pointer text-[16px] text-slate-400 hover:text-white"> Markets</Link>
             
@@ -40,22 +45,36 @@ function Navbar() {
           <li>
             <Link to={"/"} class="rounded-b bg-white  hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap" href="#">Sell</Link>
           </li>
+            
         </ul>
         </div>
+        <button 
+            onClick={()=>navigate('/Wallet')}
+             className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+        <FaWallet className="mr-2" />
+        Wallet
+      </button>
             
 
-            <Link to="#"className="font-poppins font-normal cursor-pointer text-[16px] text-slate-400 hover:text-white"> Home</Link>
+            
 
             <Link to="#"className="font-poppins font-normal cursor-pointer text-[16px] text-slate-400 hover:text-white"> </Link>
 
-            <Link to="/login"className="font-poppins font-normal cursor-pointer text-[16px] text-slate-400 hover:text-white" > Sign In</Link>
+            {
+            username == 'User' ? <Link to="/login" className={`${username == 'User' ? 'visible' : 'invisible'} font-poppins font-normal cursor-pointer text-[16px] text-slate-400 hover:text-white`} > Sign In</Link> :<button
+            onClick={() => navigate("/logOut")}
+            className="text-white font-poppins p-2 w-[130px] ml-5 mr-10 rounded-lg bg-gradient-to-r from-[#c02828] via-[#d4203e] to-[#937a7f] hover:from-[#7590d3] hover:via-[#0095e4] hover:to-[#708bcd]"
+          >
+            LogOut
+          </button>
+            }
              
           </ul>
           <button
             onClick={() => navigate("/register")}
             className="text-white font-poppins p-2 w-[130px] ml-5 mr-10 rounded-lg bg-gradient-to-r from-[#667db6] via-[#0082c8] to-[#667db6] hover:from-[#7590d3] hover:via-[#0095e4] hover:to-[#708bcd]"
           >
-            Sign Up
+            {username=='User' ? 'Sign Up' : username}
           </button>
         </div>
 

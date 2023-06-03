@@ -1,16 +1,44 @@
 import React, { useState, useEffect, useContext } from "react";
 import DataContext from "../Context/dataContext";
 import { Link } from "react-router-dom";
+import env from "../env";
 
 export default function Register() {
   const data = useContext(DataContext);
+  const {host, Register, setRegister,signup} = data;
+
+
+  const handleOnchange=(e)=>{
+    setRegister({...Register,[e.target.name]:e.target.value});
+  }
+  const handleOnSubmit=(e)=>{
+    e.preventDefault();
+    signup()
+    registerApi(Register.username,Register.password)
+
+  }
+
+
+  const registerApi=async(username,password)=>{
+    console.log("calling registerApi");
+      const response = await fetch(`${host}/registerUser`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Provide all values to registerUser
+        body: JSON.stringify({username, password}),
+      });
+      console.log(await response.json());
+    };
+
+
   return (
     <>
 
       <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100">
         <div
           class="
-          mt-24
           flex flex-col
           bg-white
           shadow-md
@@ -32,7 +60,7 @@ export default function Register() {
           </div>
 
           <div class="mt-10">
-            <form action="#">
+            <form>
               <div class="flex flex-col mb-5">
                 <label
                   for="email"
@@ -58,23 +86,22 @@ export default function Register() {
                   </div>
 
                   <input
-                    id="username"
-                    type="username"
-                    name="username"
-                    class="
-                    text-sm
-                    placeholder-gray-500
-                    pl-10
-                    pr-4
-                    rounded-2xl
-                    border border-gray-400
-                    w-full
-                    py-2
-                    focus:outline-none focus:border-blue-400
-                  "
-
-                    placeholder="Enter your username"
-                  />
+              type="text"
+              id="username"
+              name="username"
+              onChange={handleOnchange}
+              placeholder="Email or Username"
+              class="text-sm
+              placeholder-gray-500
+              pl-10
+              pr-4
+              rounded-2xl
+              border border-gray-400
+              w-full
+              py-2
+              focus:outline-none focus:border-blue-400"
+            />
+               
                 </div>
               </div>
               <div class="flex flex-col mb-5">
@@ -101,23 +128,25 @@ export default function Register() {
                     <i class="fas fa-at text-blue-500"></i>
                   </div>
 
+
                   <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    class="
-                    text-sm
-                    placeholder-gray-500
-                    pl-10
-                    pr-4
-                    rounded-2xl
-                    border border-gray-400
-                    w-full
-                    py-2
-                    focus:outline-none focus:border-blue-400
-                  "
-                    placeholder="Enter your email"
-                  />
+              type="email"
+              id="email"
+              name="email"
+              onChange={handleOnchange}
+              placeholder="Enter your email"
+              class="text-sm
+              placeholder-gray-500
+              pl-10
+              pr-4
+              rounded-2xl
+              border border-gray-400
+              w-full
+              py-2
+              focus:outline-none focus:border-blue-400"
+            />
+
+                 
                 </div>
               </div>
               <div class="flex flex-col mb-6">
@@ -147,28 +176,29 @@ export default function Register() {
                   </div>
 
                   <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    class="
-                    text-sm
-                    placeholder-gray-500
-                    pl-10
-                    pr-4
-                    rounded-2xl
-                    border border-gray-400
-                    w-full
-                    py-2
-                    focus:outline-none focus:border-blue-400
-                  "
-                    placeholder="Enter your password"
-                  />
+              type="password"
+              id="password"
+              name="password"
+              onChange={handleOnchange}
+              placeholder="Enter your Password"
+              class="text-sm
+              placeholder-gray-500
+              pl-10
+              pr-4
+              rounded-2xl
+              border border-gray-400
+              w-full
+              py-2
+              focus:outline-none focus:border-blue-400"
+            />
+                 
                 </div>
               </div>
 
               <div class="flex w-full">
                 <button
                   type="submit"
+                  onClick={handleOnSubmit}
                   class="
                   flex
                   mt-2
