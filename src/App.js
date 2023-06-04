@@ -10,10 +10,14 @@ import Login from "./Pages/Login";
 import ViewStock   from "./Pages/ViewStock";
 import Order from "./Pages/Order";
 import Wallet from "./Pages/Wallet";
+import Portfolio from "./Pages/Portfolio";
+import MyProfile from "./Pages/MyProfile";
 function App() {
+  
   
   return (
     <>
+
       <DataState>
         <BrowserRouter>
           <Navbar/>
@@ -34,6 +38,12 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/Wallet" element={<Wallet/>} />
+          </Routes>
+          <Routes>
+            <Route path="/portfolio" element={<Portfolio/>} />
+          </Routes>
+          <Routes>
+            <Route path="/updateProfile" element={<MyProfile/>} />
           </Routes>
         </BrowserRouter>
       </DataState>

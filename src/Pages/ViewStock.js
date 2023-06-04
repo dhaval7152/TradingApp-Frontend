@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function ViewStocks() {
   document.title = "view Stocks";
   const data = useContext(DataContext);
-  const {host,setCoin} =data;
+  const {host,setCoin,checkLoggedIn} =data;
   const navigate=useNavigate();
   
   const [coins, setcoins] = useState([])
@@ -22,6 +22,7 @@ export default function ViewStocks() {
   }
   useEffect(() => {
     viewStockApi()
+    checkLoggedIn()
   }, [])
   
   const viewStockApi=async()=>{

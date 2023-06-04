@@ -43,7 +43,7 @@ const BuySellPage = () => {
   };
 
   const buyStockApi=async(data)=>{
-    console.log("calling loginApi");
+    console.log("calling buyStockApi");
       const response = await fetch(`${host}/buyStock`, {
         method: "POST",
         headers: {
@@ -58,17 +58,21 @@ const BuySellPage = () => {
       console.log("🚀 -------------------🚀")
      
 
-    //   if (res.status === "fail") {
-    //     setUsernameError(res.message);
-    //     setPasswordError(res.message);
+      if (res.status === "failed") {
+        alert(res.msg)
 
-    //   } else {
-    //     setUserData(res);
-    //     localStorage.setItem("auth-token", res.token);
-    //     navigate("/");
-    //   }
+        // setUsernameError(res.message);
+        // setPasswordError(res.message);
+
+      } else {
+        alert("BUyed")
+        // setUserData(res);
+        // localStorage.setItem("auth-token", res.token);
+        // navigate("/");
+      }
     };
   const sellStockApi=async(data)=>{
+    
     console.log("calling loginApi");
       const response = await fetch(`${host}/sellStock`, {
         method: "POST",

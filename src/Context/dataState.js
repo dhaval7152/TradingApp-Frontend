@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import env from "../env";
 
 const DataState = (props) => {
+  
+
   const host = env.host;
   const url = env.host;
   const [credentials, setCredentials] = useState({
@@ -83,6 +85,7 @@ const DataState = (props) => {
       console.error(error);
     }
   };
+  
 
 
   return (
@@ -101,7 +104,7 @@ const DataState = (props) => {
         username,
         setUsername,
         coin,
-        setCoin
+        setCoin,
       }}
     >
       {props.children}
