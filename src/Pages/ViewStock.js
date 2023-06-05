@@ -15,6 +15,8 @@ export default function ViewStocks() {
 
   const handleSend=(coin)=>{
     setCoin(coin)
+    window.localStorage.setItecm('coin',JSON.stringify(coin))
+
     navigate("/order")
   }
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function ViewStocks() {
         }
         const data = await response.json();
         setcoins(data);
+
       } catch (error) {
         console.error(error);
       }
