@@ -11,6 +11,7 @@ const DataState = (props) => {
     username: "",
     password: "",
   });
+  
   const [coin, setCoin] = useState({});
   const [Register, setRegister] = useState({
     username: "",
@@ -77,7 +78,7 @@ const DataState = (props) => {
           user: userData.status,
         });
         setUsername(userData.username)
-        console.log("usernma",userData.username);
+        console.log({username:userData.username});
       } else {
         setUserData({ token: undefined, user: undefined });
       }

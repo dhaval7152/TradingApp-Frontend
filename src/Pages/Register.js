@@ -1,12 +1,22 @@
 import React, { useState, useEffect, useContext } from "react";
 import DataContext from "../Context/dataContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import env from "../env";
 
 export default function Register() {
   const data = useContext(DataContext);
-  const {host, Register, setRegister,signup} = data;
+  const {host, Register, setRegister,signup,checkLoggedIn,userData} = data;
+  const navigate = useNavigate();
 
+  // const checkAuth = () => {
+  //   {
+  //     userData.user ? navigate("/") : navigate("/register");
+  //   }
+  // };
+  useEffect(() => {
+    checkLoggedIn();
+    // checkAuth();
+  }, []);
 
   const handleOnchange=(e)=>{
     setRegister({...Register,[e.target.name]:e.target.value});
@@ -29,7 +39,15 @@ export default function Register() {
         // Provide all values to registerUser
         body: JSON.stringify({username, password}),
       });
-      console.log(await response.json());
+      const res=await response.json()
+      console.log("🚀 ---------------------------🚀")
+      console.log("🚀 ~ registerApi ~ res:", res)
+      console.log("🚀 ---------------------------🚀")
+      if(res.username){
+        navigate('/login')
+      }
+      
+      
     };
 
 

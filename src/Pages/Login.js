@@ -17,10 +17,13 @@ export default function Login() {
   const handleLogin=(e)=>{
     e.preventDefault()
     loginApi(credentials.username,credentials.password)
+    
 
   }
   const loginApi=async(username,password)=>{
+   
     console.log("calling loginApi");
+    
       const response = await fetch(`${host}/loginUser`, {
         method: "POST",
         headers: {

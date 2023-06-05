@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import DataState from "./Context/dataState";
 import env from "./env";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -12,15 +12,28 @@ import Order from "./Pages/Order";
 import Wallet from "./Pages/Wallet";
 import Portfolio from "./Pages/Portfolio";
 import MyProfile from "./Pages/MyProfile";
+import Accessdenied from "./Pages/Accessdenied";
+import DataContext from "./Context/dataContext";
+import Admin from "./Pages/Admin";
 function App() {
+
+  const data = useContext(DataContext);
+  const { checkLoggedIn,userData} = data;
+  useEffect(() => {
+    checkLoggedIn()
+  }, [])
   
   
   return (
     <>
 
-      <DataState>
+      {/* <DataState> */}
+
         <BrowserRouter>
           <Navbar/>
+          {userData.user ? <Routes>
+            <Route path="/admin" element={<Admin/>} />
+          </Routes> : <h1></h1>}
           <Routes>
             <Route path="/" element={<Home/>} />
           </Routes>
@@ -31,7 +44,7 @@ function App() {
             <Route path="/login" element={<Login/>} />
           </Routes>
           <Routes>
-            <Route path="/viewStocks" element={<ViewStock/>} />
+            <Route  path="/viewStocks" element={<ViewStock/>} />
           </Routes>
           <Routes>
             <Route path="/order" element={<Order/>} />
@@ -45,8 +58,11 @@ function App() {
           <Routes>
             <Route path="/updateProfile" element={<MyProfile/>} />
           </Routes>
+          <Routes>
+            <Route path="/accessDenied" element={<Accessdenied/>} />
+          </Routes>
         </BrowserRouter>
-      </DataState>
+      {/* </DataState> */}
     </>
   );
 }

@@ -4,18 +4,20 @@ import { useNavigate, Link } from "react-router-dom";
 
 export default function Home() {
   const data = useContext(DataContext);
-  const { url, checkLoggedIn, username, userData } = data;
+  const { url, checkLoggedIn, username, userData} = data;
   const navigate = useNavigate();
-  const checkAuth = () => {
-    {
-      userData.user ? navigate("/") : navigate("/register");
-    }
-  };
+  // const checkAuth = () => {
+  //   {
+  //     userData.user ? navigate("/") : navigate("/");
+  //   }
+  // };
+  // checkAuth();
+
   useEffect(() => {
+    window.localStorage.setItem('username',username)
     checkLoggedIn();
 
-    checkAuth();
-  }, []);
+  }, [username]);
 
   return (
     <>

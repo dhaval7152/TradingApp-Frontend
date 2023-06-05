@@ -1,42 +1,63 @@
 import React, { useState, useEffect,useContext } from "react";
 import DataContext from '../Context/dataContext';
+import { useNavigate } from "react-router-dom";
 
 export default function Portfolio() {
-    const data = [
-        {
-          coinName: "Bitcoin",
-          quantity: 2.5,
-          buyPrice: 50000,
-          purchaseTotal: 125000,
-          currentPrice: 55000,
-          profitLoss: 2500,
-        },
-        {
-          coinName: "Ethereum",
-          quantity: 10,
-          buyPrice: 3000,
-          purchaseTotal: 30000,
-          currentPrice: 3500,
-          profitLoss: 500,
-        },
-        {
-          coinName: "Ethereum",
-          quantity: 10,
-          buyPrice: 3000,
-          purchaseTotal: 30000,
-          currentPrice: 3500,
-          profitLoss: 500,
-        },
-        {
-          coinName: "Ethereum",
-          quantity: 10,
-          buyPrice: 3000,
-          purchaseTotal: 30000,
-          currentPrice: 3500,
-          profitLoss: 500,
-        },
-        // Add more data objects as needed
-      ];
+    const data = useContext(DataContext);
+    const {host,username,checkLoggedIn,userData} =data;
+
+  const navigate=useNavigate();
+    const [usr, setusr] = useState("")
+    const [portfolio, setportfolio] = useState([
+     
+    ])
+   
+    // useEffect(() => {
+    //   viewPortfolioApi({username})
+    //   console.log("hitting viewPortfolioApi ");
+    //   checkLoggedIn()
+
+    // }, [])
+
+    useEffect(() => {
+      checkLoggedIn()
+      const data=window.localStorage.getItem('username')
+      setusr(data)
+      // viewPortfolioApi({username})
+      viewPortfolioApi({username:data})
+
+    }, [username]);
+
+    console.log(portfolio);
+   
+
+    const viewPortfolioApi=async(data)=>{
+        try {
+          const response = await fetch(`${host}/viewPortfolio`,{
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+             body: JSON.stringify(data),
+
+          });
+          if (response.status==="failed") {
+            throw new Error("Failed to fetch data");
+
+          }
+          const res = await response.json();
+          if(res.status==="failed"){
+            setportfolio([]);
+          }
+          else{
+            setportfolio(res);
+          }
+
+        } catch (error) {
+          console.error(error);
+        }
+      };
+    
     
 return(
     <div className="flex justify-center">
@@ -54,16 +75,47 @@ return(
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
+          {/* {console.log(portfolio.length)} */}
+          {/* {console.log("this",portfolio)} */}
+          {portfolio.length === 0 ?  
+          <>
+        <td className="py-2 px-4 text-white">NO data</td>
+        <td className="py-2 px-4 text-white">NO data</td>
+        <td className="py-2 px-4 text-white">NO data</td>
+        <td className="py-2 px-4 text-white">NO data</td>
+        <td className="py-2 px-4 text-white">NO data</td>
+        <td className="py-2 px-4 text-white">NO data</td>
+          </>
+        :
+        <>
+        {portfolio.map((item, index) => (
             <tr key={index} className={index % 2 === 0 ? "bg-blue-100" : "bg-blue-50"}>
-              <td className="py-2 px-4">{item.coinName}</td>
-              <td className="py-2 px-4">{item.quantity}</td>
-              <td className="py-2 px-4">{item.buyPrice}</td>
-              <td className="py-2 px-4">{item.purchaseTotal}</td>
-              <td className="py-2 px-4">{item.currentPrice}</td>
-              <td className="py-2 px-4">{item.profitLoss}</td>
+            <td className="py-2 px-4">{item.coinsyml}</td>
+            <td className="py-2 px-4">{item.Quantity}</td>
+            <td className="py-2 px-4">{item.buyPrice}</td>
+            <td className="py-2 px-4">{item.value}</td>
+            <td className="py-2 px-4">{item.currentPrice}</td>
+            <td className="py-2 px-4">{item.profitLoss}</td>
             </tr>
-          ))}
+            ))}
+        </>  
+        }
+
+           {/* {
+            !portfolio.length >  0 ? <h1>No stocks</h1> :
+            <>
+          {portfolio.map((item, index) => (
+            <tr key={index} className={index % 2 === 0 ? "bg-blue-100" : "bg-blue-50"}>
+            <td className="py-2 px-4">{item.coinsyml}</td>
+            <td className="py-2 px-4">{item.Quantity}</td>
+            <td className="py-2 px-4">{item.buyPrice}</td>
+            <td className="py-2 px-4">{item.value}</td>
+            <td className="py-2 px-4">{item.currentPrice}</td>
+            <td className="py-2 px-4">{item.profitLoss}</td>
+            </tr>
+            ))}
+              </>
+          }    */}
         </tbody>
       </table>
     </div>

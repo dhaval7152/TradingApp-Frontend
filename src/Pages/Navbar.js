@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { FaWallet } from "react-icons/fa";
+import { AiOutlineLogout } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { useNavigate, Link } from "react-router-dom";
@@ -10,6 +11,16 @@ function Navbar() {
   const data = useContext(DataContext);
   const { url, checkLoggedIn, username } = data;
   console.log(username);
+
+  const handleLogOut = () => {
+    const storage = localStorage.getItem("auth-token");
+    if (storage) {
+      localStorage.removeItem("auth-token");
+      localStorage.removeItem("username");
+    }
+    window.location.reload();
+    navigate("/login");
+  };
   return (
     <>
       <nav className="flex  bg-blue-200 z-50 w-full h-fit justify-between items-center py-4 navbar backdrop-filter backdrop-blur-lg bg-opacity-40">
@@ -101,10 +112,10 @@ function Navbar() {
               </Link>
             ) : (
               <button
-                onClick={() => navigate("/logOut")}
-                className="text-white font-poppins p-2 w-[130px] ml-5 mr-10 rounded-lg bg-gradient-to-r from-[#c02828] via-[#d4203e] to-[#937a7f] hover:from-[#7590d3] hover:via-[#0095e4] hover:to-[#708bcd]"
+                onClick={() => handleLogOut()}
+                className="text-white font-poppins p-2 w-[40px] ml-5 mr-10 rounded-lg bg-gradient-to-r from-[#e48686] via-[#de445d] to-[#f53252] hover:from-[#7590d3] hover:via-[#0095e4] hover:to-[#708bcd]"
               >
-                LogOut
+                <AiOutlineLogout className="mr-2" />
               </button>
             )}
           </ul>
@@ -116,43 +127,41 @@ function Navbar() {
           </button>
 
           <div class="relative inline-block group pr-8 py-2">
-              <button class="bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 text-white font-semibold py-2 px-4 rounded inline-flex items-center">
+            <button class="bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 text-white font-semibold py-2 px-4 rounded inline-flex items-center">
               <FaUserCircle className="text-white h-4 w-4" />
-            <svg class="fill-current h-4 w-4 ml-2" viewBox="0 0 20 20">
-              <path d="M6 8l4 4 4-4z" />
-            </svg>
-              </button>
+              <svg class="fill-current h-4 w-4 ml-2" viewBox="0 0 20 20">
+                <path d="M6 8l4 4 4-4z" />
+              </svg>
+            </button>
 
-              <ul class="bg-gray-300 text-center absolute hidden text-gray-700 pt-1 group-hover:block">
-                <li>
-                  <Link
-                    to={"/updateProfile"}
-                    class="rounded-t   hover:bg-slate-300  block whitespace-no-wrap"
-                    href="#"
-                  >
-                    My Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={"/portfolio"}
-                    class="bg-white  hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
-                    href="#"
-                  >
-                    Portfolio
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={"#"}
-                    class="rounded-b bg-white  hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
-                    href="#"
-                  >
-                    
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <ul class="bg-gray-300 text-center absolute hidden text-gray-700 pt-1 group-hover:block">
+              <li>
+                <Link
+                  to={"/updateProfile"}
+                  class="rounded-t   hover:bg-slate-300  block whitespace-no-wrap"
+                  href="#"
+                >
+                  My Profile
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={"/portfolio"}
+                  class="bg-white  hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
+                  href="#"
+                >
+                  Portfolio
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={"#"}
+                  class="rounded-b bg-white  hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
+                  href="#"
+                ></Link>
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* <div className="flex flex-1 sm:hidden justify-end items-center">

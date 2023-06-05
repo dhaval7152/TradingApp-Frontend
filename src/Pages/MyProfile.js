@@ -1,19 +1,69 @@
-import React, { useState } from "react";
+import React, { useState ,useContext,useEffect} from "react";
+import { useNavigate } from "react-router-dom";
+import DataContext from "../Context/dataContext";
 
 const ProfilePage = () => {
-  const [name, setName] = useState("John Doe");
-  const [newName, setNewName] = useState("");
+  const navigate=useNavigate();
+  const data = useContext(DataContext);
+  const {host,username,checkLoggedIn} =data;
+  
+  const [userNme, setuserNme] = useState("");
+  const [name, setName] = useState("");
+  const [upi, setUPI] = useState("");
+  
+ 
+  useEffect(() => {
+    checkLoggedIn()
+    viewProfile({username})
+  }, [])
+  
 
-  // Function to handle the form submission
   const handleSubmit = (e) => {
+    console.log("handleSubmit");
     e.preventDefault();
-    // Perform the update logic here
-    // ...
-    console.log("Updating Name:", newName);
-    setName(newName);
-    setNewName("");
+    updateProfile({username,name,upi})
   };
 
+  const viewProfile=async(data)=>{
+    try {
+      const response = await fetch(`${host}/viewProfile`,{
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+
+      });
+      
+      const res = await response.json();
+      setuserNme(res.username)
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+  const updateProfile=async(data)=>{
+    console.log("htitii updateProfile",data);
+    
+    try {
+      const response = await fetch(`${host}/updateProfile`,{
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+
+      });
+      
+      const res = await response.json();
+
+      setuserNme(res.username)
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+  
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">Profile</h2>
@@ -25,8 +75,8 @@ const ProfilePage = () => {
           <input
             type="text"
             id="name"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
             className="w-full px-4 py-2 rounded border border-gray-300"
           />
@@ -38,7 +88,7 @@ const ProfilePage = () => {
           <input
             type="text"
             id="username"
-            value="johndoe" // Example value, non-editable
+            value={userNme} 
             disabled
             className="w-full px-4 py-2 rounded border border-gray-300"
           />
@@ -50,8 +100,8 @@ const ProfilePage = () => {
           <input
             type="text"
             id="upiId"
-            value="example@upi" // Example value, non-editable
-            disabled
+            value={upi} 
+            onChange={(e) => setUPI(e.target.value)}
             className="w-full px-4 py-2 rounded border border-gray-300"
           />
         </div>
