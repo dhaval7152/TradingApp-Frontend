@@ -4,12 +4,23 @@ import DataContext from "../Context/dataContext";
 const BuySellPage = () => {
   const data = useContext(DataContext);
   const { host, coin,username } = data;
+  const [cin, setCin] = useState({})
 
 
-    console.log(username);
   
   const [usdtAmount, setUsdtAmount] = useState("");
   const [quntity, setQuntity] = useState(0)
+
+
+
+  useEffect(() => {
+    // checkLoggedIn()
+    const data=window.localStorage.getItem('coin')
+    setCin(JSON.stringify(data))
+    
+  }, [coin]);
+
+
 
   const calculateQuantity = () => {
     // Improve this bcz it only set values when coin buy click
@@ -101,13 +112,15 @@ const BuySellPage = () => {
       }
     };
 
-  if (!coin) {
+  if (!cin) {
     return <div>No coin details found.</div>;
   }
 
   return (
+    <>
+    {console.log(cin) }
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">{coin.CoinkName} Details</h2>
+      <h2 className="text-2xl font-bold mb-4">{cin.CoinkName} Details</h2>
       
       <form  className="max-w-md mx-auto">
         <label htmlFor="usdtAmount" className="block mb-2">
@@ -137,6 +150,8 @@ const BuySellPage = () => {
         </button>
       </form>
     </div>
+    </>
+
   );
 };
 
