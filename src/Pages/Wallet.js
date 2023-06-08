@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import DataContext from "../Context/dataContext";
 import { useNavigate } from "react-router-dom";
+import Accessdenied from "./Accessdenied";
 
 const WalletPage = () => {
   const data = useContext(DataContext);
@@ -9,18 +10,18 @@ const WalletPage = () => {
   const [usr, setusr] = useState("")
   const [balance, setBalance] = useState(0);
   const [newFunds, setNewFunds] = useState(0);
+  const [upi, setUPI] = useState("");
+
+  
   const navigate = useNavigate();
 
 
   useEffect(() => {
-    checkLoggedIn()
-    // window.localStorage.setItem('username',username)
     const data=window.localStorage.getItem('username')
     setusr(data)
-    getUserBalAPi({username:username})
-  }, [username]);
+    getUserBalAPi({username:usr})
+  }, [balance,upi,newFunds]);
 
- 
 
   const handleAddFunds = () => {
     depositApi({ username, amount: newFunds });
@@ -113,6 +114,8 @@ const WalletPage = () => {
         console.log("🚀 ~ getUserBalAPi ~ data:", res)
         console.log("🚀 -------------------------------🚀")
         setBalance(res.balance);
+        setUPI(res.upi)
+        
       } catch (error) {
         console.error(error);
       }
@@ -121,13 +124,14 @@ const WalletPage = () => {
 
   return (
     <>
-      {userData.user ? <div className="flex flex-col items-center mt-10 h-screen">
+      {userData.user ?
+      <div className="flex flex-col items-center mt-10 h-screen">
         <h2 className="text-3xl font-bold mb-4">
           <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
             Add/Withdraw Funds
           </span>
         </h2>
-        <p className="text-lg mb-4">UPI ID: {usr}@upi</p>
+        <p className="text-lg mb-4">UPI ID: {upi} </p>
 
         <div className="balance">
           <h1>
@@ -140,6 +144,7 @@ const WalletPage = () => {
           <input
             type="number"
             value={newFunds}
+            min={0}
             // onChange={(e) => setNewFunds(parseFloat(e.target.value))}
             onChange={(e) => setNewFunds(parseInt(e.target.value))}
             className="border border-gray-300 rounded-md px-4 py-2 mb-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -179,15 +184,15 @@ const WalletPage = () => {
             Withdraw Funds
           </button>
         </div>
-        {/* <p className="text-green-500 mt-4">
-          Funds added/withdrawn successfully! New balance: ${balance}
-        </p> */}
+        
       </div>
+
+      :
+      <Accessdenied/>
       
-      
-      : <h1>Login First</h1>}
-      
+      }
     </>
+
   );
 };
 

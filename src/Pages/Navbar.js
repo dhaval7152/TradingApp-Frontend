@@ -25,7 +25,10 @@ function Navbar() {
     <>
       <nav className="flex  bg-blue-200 z-50 w-full h-fit justify-between items-center py-4 navbar backdrop-filter backdrop-blur-lg bg-opacity-40">
         <div className="flex w-fit flex-row ml-10 cursor-pointer select-none">
-          <h3 className=" flex items-center justify-center ps-2 font-bold text-2xl font-poppins bg-clip-text text-transparent bg-gradient-to-r from-[#286cd2] to-[#bcbc55]">
+          <h3
+            onClick={() => navigate("/")}
+            className=" flex items-center justify-center ps-2 font-bold text-2xl font-poppins bg-clip-text text-transparent bg-gradient-to-r from-[#286cd2] to-[#bcbc55]"
+          >
             TradePro
           </h3>
         </div>
@@ -40,7 +43,7 @@ function Navbar() {
             </Link>
 
             <Link
-              to="#"
+              to="/viewStocks"
               className="font-poppins font-normal cursor-pointer text-[16px] text-slate-400 hover:text-white"
             >
               {" "}
@@ -59,30 +62,32 @@ function Navbar() {
                 <li>
                   <Link
                     to={"/viewStocks"}
-                    class="rounded-t   hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
+                    class="rounded-t  bg-gray-300 hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
                     href="#"
                   >
                     Market Overview
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to={"/"}
+                  {/* <Link
+                    to="/LimitOrder"
+
                     class="bg-white  hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
                     href="#"
                   >
-                    Buy{" "}
-                  </Link>
+                    Limit Order
+                  </Link> */}
                 </li>
-                <li>
+                {/* <li>
                   <Link
-                    to={"/"}
+                   to="/viewStocks"
+
                     class="rounded-b bg-white  hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
                     href="#"
                   >
                     Sell
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
             <button
@@ -119,12 +124,20 @@ function Navbar() {
               </button>
             )}
           </ul>
-          <button
-            onClick={() => navigate("/register")}
-            className="text-white font-poppins p-1 w-[130px] ml-5 mr-10 rounded-lg bg-gradient-to-r from-[#667db6] via-[#0082c8] to-[#667db6] hover:from-[#7590d3] hover:via-[#0095e4] hover:to-[#708bcd]"
-          >
-            {username == "User" ? "Sign Up" : username}
-          </button>
+          {username == "User" ? (
+            <button
+              onClick={() => navigate("/register")}
+              className="text-white font-poppins h-[41px] w-[80px] mt-1 ml-5 mr-10 rounded-lg bg-gradient-to-r from-[#4d70da] via-[#0082c8] to-[#7195ef] hover:from-[#7590d3] hover:via-[#0095e4] hover:to-[#708bcd]"
+            >
+              {username == "User" ? "Sign Up" : username}
+            </button>
+          ) : (
+            <button
+              className="text-white font-poppins h-[41px] w-[80px] mt-1 ml-5 mr-10 rounded-lg bg-gradient-to-r from-[#4d70da] via-[#0082c8] to-[#7195ef] hover:from-[#7590d3] hover:via-[#0095e4] hover:to-[#708bcd]"
+            >
+              {username}
+            </button>
+          )}
 
           <div class="relative inline-block group pr-8 py-2">
             <button class="bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 text-white font-semibold py-2 px-4 rounded inline-flex items-center">

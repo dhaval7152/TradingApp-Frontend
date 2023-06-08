@@ -1,10 +1,11 @@
 import React, { useState, useEffect,useContext } from "react";
 import DataContext from '../Context/dataContext';
 import { useNavigate } from "react-router-dom";
+import Accessdenied from "./Accessdenied";
 
 export default function Portfolio() {
     const data = useContext(DataContext);
-    const {host,username,checkLoggedIn,userData} =data;
+    const {host,username,checkLoggedIn,userData,coins} =data;
 
   const navigate=useNavigate();
     const [usr, setusr] = useState("")
@@ -20,7 +21,7 @@ export default function Portfolio() {
     // }, [])
 
     useEffect(() => {
-      checkLoggedIn()
+      // checkLoggedIn()
       const data=window.localStorage.getItem('username')
       setusr(data)
       // viewPortfolioApi({username})
@@ -28,7 +29,7 @@ export default function Portfolio() {
 
     }, [username]);
 
-    console.log(portfolio);
+    // console.log(portfolio);
    
 
     const viewPortfolioApi=async(data)=>{
@@ -57,9 +58,14 @@ export default function Portfolio() {
           console.error(error);
         }
       };
+      
     
     
 return(
+  <>
+  {
+    userData.user ? 
+ 
     <div className="flex justify-center">
     <div className="bg-gradient-to-b from-blue-500 to-black py-4 px-6 rounded-lg w-full max-w-5xl mt-10">
       <h2 className="text-xl font-bold mb-4 text-center text-white">Portfolio</h2>
@@ -75,8 +81,6 @@ return(
           </tr>
         </thead>
         <tbody>
-          {/* {console.log(portfolio.length)} */}
-          {/* {console.log("this",portfolio)} */}
           {portfolio.length === 0 ?  
           <>
         <td className="py-2 px-4 text-white">NO data</td>
@@ -88,14 +92,17 @@ return(
           </>
         :
         <>
+       
         {portfolio.map((item, index) => (
+          
             <tr key={index} className={index % 2 === 0 ? "bg-blue-100" : "bg-blue-50"}>
             <td className="py-2 px-4">{item.coinsyml}</td>
             <td className="py-2 px-4">{item.Quantity}</td>
             <td className="py-2 px-4">{item.buyPrice}</td>
-            <td className="py-2 px-4">{item.value}</td>
-            <td className="py-2 px-4">{item.currentPrice}</td>
-            <td className="py-2 px-4">{item.profitLoss}</td>
+            <td className="py-2 px-4">${item.value}</td>
+            <td className="py-2 px-4">currentPrice</td>
+            <td className="py-2 px-4">(cp * qunt) - buyvalue</td>
+
             </tr>
             ))}
         </>  
@@ -120,6 +127,12 @@ return(
       </table>
     </div>
   </div>
+  :
+  <Accessdenied/>
+  }
+
+  </>
+
 )  
 
 }

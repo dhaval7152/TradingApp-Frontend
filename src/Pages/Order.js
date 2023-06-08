@@ -1,10 +1,11 @@
 import { useState, useContext,useEffect } from "react";
 import DataContext from "../Context/dataContext";
+import Accessdenied from "./Accessdenied";
 
 const BuySellPage = () => {
   const data = useContext(DataContext);
   const { host, coin,username } = data;
-  const [cin, setCin] = useState({})
+  const [coinSYML, setcoinSYML] = useState("")
 
 
   
@@ -15,8 +16,9 @@ const BuySellPage = () => {
 
   useEffect(() => {
     // checkLoggedIn()
-    const data=window.localStorage.getItem('coin')
-    setCin(JSON.stringify(data))
+    // window.localStorage.setItem('coin',JSON.stringify(coin))
+    const coindata=window.localStorage.getItem('coinsyml')
+    setcoinSYML(coindata)
     
   }, [coin]);
 
@@ -38,6 +40,7 @@ const BuySellPage = () => {
     console.log("🚀 ~ handleBuy ~ handleBuy:", handleBuy)
     console.log("🚀 -------------------------------------🚀")
     buyStockApi({username,coinsyml:coin.coinsyml,Amount:usdtAmount})
+
     // console.log({username,coinsyml:coin.coinsyml,usdtAmount});
   };
   const handleSell = (e) => {
@@ -112,15 +115,14 @@ const BuySellPage = () => {
       }
     };
 
-  if (!cin) {
-    return <div>No coin details found.</div>;
+  if (coinSYML==null) {
+    return <h1 class="text-red-700 text-4xl">No coin details found.</h1>;
   }
 
   return (
     <>
-    {console.log(cin) }
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">{cin.CoinkName} Details</h2>
+      <h2 className="text-2xl font-bold mb-4">{coinSYML} Details</h2>
       
       <form  className="max-w-md mx-auto">
         <label htmlFor="usdtAmount" className="block mb-2">
@@ -130,6 +132,7 @@ const BuySellPage = () => {
           type="number"
           id="usdtAmount"
           value={usdtAmount}
+          min={0}
           onChange={handleAmountChange}
           className="border border-gray-300 rounded p-2 mb-4 w-full"
         />
@@ -150,7 +153,7 @@ const BuySellPage = () => {
         </button>
       </form>
     </div>
-    </>
+  </> 
 
   );
 };

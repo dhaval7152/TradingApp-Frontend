@@ -15,10 +15,11 @@ import MyProfile from "./Pages/MyProfile";
 import Accessdenied from "./Pages/Accessdenied";
 import DataContext from "./Context/dataContext";
 import Admin from "./Pages/Admin";
+import LimitOrder from "./Pages/LimitOrder";
 function App() {
 
   const data = useContext(DataContext);
-  const { checkLoggedIn,userData} = data;
+  const { checkLoggedIn,userData,username} = data;
   useEffect(() => {
     checkLoggedIn()
   }, [])
@@ -31,7 +32,7 @@ function App() {
 
         <BrowserRouter>
           <Navbar/>
-          {userData.user ? <Routes>
+          {username=="admin" ? <Routes>
             <Route path="/admin" element={<Admin/>} />
           </Routes> : <h1></h1>}
           <Routes>
@@ -48,6 +49,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/order" element={<Order/>} />
+          </Routes>
+          <Routes>
+            <Route path="/LimitOrder" element={<LimitOrder/>} />
           </Routes>
           <Routes>
             <Route path="/Wallet" element={<Wallet/>} />

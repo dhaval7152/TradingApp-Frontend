@@ -7,6 +7,8 @@ export default function Register() {
   const data = useContext(DataContext);
   const {host, Register, setRegister,signup,checkLoggedIn,userData} = data;
   const navigate = useNavigate();
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   // const checkAuth = () => {
   //   {
@@ -14,7 +16,7 @@ export default function Register() {
   //   }
   // };
   useEffect(() => {
-    checkLoggedIn();
+    // checkLoggedIn();
     // checkAuth();
   }, []);
 
@@ -24,12 +26,13 @@ export default function Register() {
   const handleOnSubmit=(e)=>{
     e.preventDefault();
     signup()
-    registerApi(Register.username,Register.password)
+    registerApi(Register.username,Register.password,Register.email)
+    // console.log(Register.username,Register.email,Register.password);
 
   }
 
 
-  const registerApi=async(username,password)=>{
+  const registerApi=async(username,password,email)=>{
     console.log("calling registerApi");
       const response = await fetch(`${host}/registerUser`, {
         method: "POST",
@@ -37,12 +40,18 @@ export default function Register() {
           'Content-Type': 'application/json',
         },
         // Provide all values to registerUser
-        body: JSON.stringify({username, password}),
+        body: JSON.stringify({username,email, password}),
       });
       const res=await response.json()
-      console.log("🚀 ---------------------------🚀")
-      console.log("🚀 ~ registerApi ~ res:", res)
-      console.log("🚀 ---------------------------🚀")
+      if (res.status === "fail") {
+        // setUsernameError(res.message);
+        // console.log(res.message);
+        setPasswordError(res.message);
+
+      } else {
+        alert("Account Created!")
+      }
+
       if(res.username){
         navigate('/login')
       }
@@ -78,6 +87,8 @@ export default function Register() {
           </div>
 
           <div class="mt-10">
+          <p className="text-sm  text-red-300">{passwordError}</p>
+
             <form>
               <div class="flex flex-col mb-5">
                 <label
@@ -118,7 +129,7 @@ export default function Register() {
               w-full
               py-2
               focus:outline-none focus:border-blue-400"
-            />
+              />
                
                 </div>
               </div>
@@ -211,6 +222,7 @@ export default function Register() {
             />
                  
                 </div>
+
               </div>
 
               <div class="flex w-full">

@@ -1,11 +1,12 @@
 import React, { useState ,useContext,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import DataContext from "../Context/dataContext";
+import Accessdenied from "./Accessdenied";
 
 const ProfilePage = () => {
   const navigate=useNavigate();
   const data = useContext(DataContext);
-  const {host,username,checkLoggedIn} =data;
+  const {host,username,checkLoggedIn,userData} =data;
   
   const [userNme, setuserNme] = useState("");
   const [name, setName] = useState("");
@@ -13,8 +14,10 @@ const ProfilePage = () => {
   
  
   useEffect(() => {
-    checkLoggedIn()
-    viewProfile({username})
+    // checkLoggedIn()
+    const data=window.localStorage.getItem('username')
+    setuserNme(data)
+    viewProfile({username:data})
   }, [])
   
 
@@ -37,6 +40,8 @@ const ProfilePage = () => {
       
       const res = await response.json();
       setuserNme(res.username)
+      setName(res.name)
+      setUPI(res.upi)
     } catch (error) {
       console.error(error);
     }
@@ -58,6 +63,7 @@ const ProfilePage = () => {
       const res = await response.json();
 
       setuserNme(res.username)
+      alert("Profile Updated")
     } catch (error) {
       console.error(error);
     }
@@ -65,7 +71,10 @@ const ProfilePage = () => {
   }
   
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow">
+    <>
+    {
+      userData.user ?
+      <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">Profile</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -113,6 +122,11 @@ const ProfilePage = () => {
         </button>
       </form>
     </div>
+    :
+    <Accessdenied/>
+  }
+    </>
+
   );
 };
 

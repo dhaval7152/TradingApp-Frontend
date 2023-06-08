@@ -3,6 +3,8 @@ import DataContext from "../Context/dataContext";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function Home() {
+  document.title = "Home";
+
   const data = useContext(DataContext);
   const { url, checkLoggedIn, username, userData} = data;
   const navigate = useNavigate();

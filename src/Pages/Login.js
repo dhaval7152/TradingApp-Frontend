@@ -37,6 +37,7 @@ export default function Login() {
 
       if (res.status === "fail") {
         setUsernameError(res.message);
+        console.log(res.message);
         setPasswordError(res.message);
 
       } else {
@@ -48,10 +49,10 @@ export default function Login() {
   return (
     <>
       <main class="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
-        <section class="flex w-[30rem] flex-col space-y-10">
+        <section class="flex w-[30rem] flex-col space-y-5">
           <div class="text-center text-4xl font-medium">Log In</div>
 
-          <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
+          <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 {} focus-within:border-indigo-500">
             <input
               type="text"
               name="username"
@@ -61,6 +62,7 @@ export default function Login() {
               class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
             />
           </div>
+            <span className="h-fit text-red-300">{usernameError}</span>
 
 
           <div class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500">
@@ -73,6 +75,8 @@ export default function Login() {
               class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
             />
           </div>
+          <p className="text-red-300">{passwordError}</p>
+
 
           <button type="submit" class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400"
           onClick={handleLogin}
