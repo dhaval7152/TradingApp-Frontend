@@ -4,7 +4,7 @@ import Accessdenied from "./Accessdenied";
 
 const BuySellPage = () => {
   const data = useContext(DataContext);
-  const { host, coin,username } = data;
+  const { host, coin,username,userData } = data;
   const [coinSYML, setcoinSYML] = useState("")
 
 
@@ -121,6 +121,8 @@ const BuySellPage = () => {
 
   return (
     <>
+    {
+      userData.user ? 
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">{coinSYML} Details</h2>
       
@@ -152,7 +154,11 @@ const BuySellPage = () => {
           Sell
         </button>
       </form>
+ 
     </div>
+    :
+    <Accessdenied/>
+}
   </> 
 
   );

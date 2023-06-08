@@ -31,15 +31,16 @@ export default function ViewStocks() {
   useEffect(() => {
     // checkLoggedIn()
     viewStockApi()
+    console.log("VIewStock callimg");
 
-  // }, [])
-}, [coins]) //useEffect Rendering More
+  }, [])
+// }, [coins]) //useEffect Rendering More
 
   
   const viewStockApi=async()=>{
       try {
         const response = await fetch(`${host}/viewStocks`,{
-          method: "POST",
+          method: "GET",
           headers: {
             'Content-Type': 'application/json',
           },

@@ -133,7 +133,7 @@ function Navbar() {
             </button>
           ) : (
             <button
-              className="text-white font-poppins h-[41px] w-[80px] mt-1 ml-5 mr-10 rounded-lg bg-gradient-to-r from-[#4d70da] via-[#0082c8] to-[#7195ef] hover:from-[#7590d3] hover:via-[#0095e4] hover:to-[#708bcd]"
+              className="text-white font-poppins h-[41px] w-fit p-2 mt-1 ml-5 mr-10 rounded-lg bg-gradient-to-r from-[#4d70da] via-[#0082c8] to-[#7195ef] hover:from-[#7590d3] hover:via-[#0095e4] hover:to-[#708bcd]"
             >
               {username}
             </button>
