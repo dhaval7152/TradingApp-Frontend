@@ -29,11 +29,17 @@ export default function ViewStocks() {
   
 
   useEffect(() => {
-    // checkLoggedIn()
     viewStockApi()
-    console.log("VIewStock callimg");
+    console.log("ViewStock useEffect calling");
 
   }, [])
+
+//   useEffect(() => {
+    
+//     viewStockApi()
+//     console.log("VIewStock callimg");
+
+//   // }, [])
 // }, [coins]) //useEffect Rendering More
 
   
@@ -55,6 +61,8 @@ export default function ViewStocks() {
         console.error(error);
       }
     };
+      
+      
   return (
     <>
     

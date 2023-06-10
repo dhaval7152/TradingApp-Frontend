@@ -99,7 +99,8 @@ return(
             <td className="py-2 px-4">{item.coinsyml}</td>
             <td className="py-2 px-4">{item.Quantity}</td>
             <td className="py-2 px-4">{item.buyPrice}</td>
-            <td className="py-2 px-4">${item.value}</td>
+            <td className="py-2 px-4">{item.buyPrice * item.Quantity}</td>
+            {/* <td className="py-2 px-4">${item.value}</td> */}
             <td className="py-2 px-4">currentPrice</td>
             <td className="py-2 px-4">(cp * qunt) - buyvalue</td>
 

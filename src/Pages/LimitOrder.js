@@ -9,6 +9,7 @@ const LimitOrder = () => {
 
   const [usdtAmount, setUsdtAmount] = useState("");
   const [Quantity, setQuntity] = useState(0);
+  const [error, seterror] = useState("")
   // const [username, setUsername] = useState("")
   const [price, setPrice] = useState(0);
 
@@ -20,31 +21,33 @@ const LimitOrder = () => {
 
   const [Ask, setAsk] = useState([]);
   const [Bid, setBid] = useState([]);
+  const [count,setCount]=useState("")
+
 
   useEffect(() => {
-    // window.localStorage.setItem('coin',JSON.stringify(coin))
     const coindata = window.localStorage.getItem("coinsyml");
     const username = window.localStorage.getItem("username");
-    console.log("🚀 ~Rerendring useEffect viewAsk")
     setcoinSYML(coindata);
+    askBid()
     viewAsk();
     viewBid();
-
+    // viewAsk();
+    // viewBid();
+    console.log("🚀 ~Re-rendring useEffect",count)
     // setUsername(username)
-    
   // }, [coin,Ask,Bid]);
-  },[])
+  },[count])
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
-
+  
   const handleBuy = (e) => {
     e.preventDefault();
-    console.log("🚀 -------------------------------------🚀");
-    console.log("🚀 ~ handleBuy ~ handleBuy:", handleBuy);
-    console.log("🚀 -------------------------------------🚀");
-    console.log(order);
+    setCount("hit Buy");
+
+    // console.log("🚀 ~ handleBuy ~ handleBuy:", handleBuy);
+    // console.log(order);
     insertBid({
       username: username,
       orderType: "Bid",
@@ -52,13 +55,16 @@ const LimitOrder = () => {
       price: order.price,
       Quantity: order.Quantity,
     });
-    askBid();
+    // askBid();
+
   };
   const handleSell = (e) => {
+
     e.preventDefault();
-    console.log("🚀 ----------------------------------------🚀");
-    console.log("🚀 ~ handleSell ~ handleSell:", handleSell);
-    console.log("🚀 ----------------------------------------🚀");
+   
+    // console.log("🚀 ----------------------------------------🚀");
+    // console.log("🚀 ~ handleSell ~ handleSell:", handleSell);
+    // console.log("🚀 ----------------------------------------🚀");
     console.log(order);
     insertAsk({
       username: username,
@@ -67,14 +73,19 @@ const LimitOrder = () => {
       price: order.price,
       Quantity: order.Quantity,
     });
-    askBid();
+    // setCount(2);
+    setCount("hit Sell");
+
+    // askBid();
   };
 
-  const handleOnchange = (e) => {
-    setOrder({ ...order, [e.target.name]: e.target.value });
-  };
-
+ 
   const askBid = async () => {
+   
+   
+    // setCount(3);
+    setCount("hit askBid");
+
     const response = await fetch(`${host}/askBid`, {
       method: "GET",
       headers: {
@@ -82,12 +93,19 @@ const LimitOrder = () => {
       },
     });
     const res = await response.json();
-    console.log("🚀 ----------------------🚀");
-    console.log("🚀 ~ askBid ~ res:", res);
-    console.log("🚀 ----------------------🚀");
+    viewAsk();
+    viewBid();
+    // console.log("🚀 askBid----------------------🚀");
+    // console.log("🚀 ~ askBid ~ res:", res);
+    // console.log("🚀 askBid----------------------🚀");
+
 
     // updatePrice(price.newPrice)
     console.log("calling Askbid");
+  };
+
+  const handleOnchange = (e) => {
+    setOrder({ ...order, [e.target.name]: e.target.value });
   };
 
   const insertBid = async (data) => {
@@ -98,10 +116,9 @@ const LimitOrder = () => {
       },
       body: JSON.stringify(data),
     });
-    const price = await response.json();
-    console.log("🚀 -----------------------------🚀");
-    console.log("🚀 ~ insertBid ~ price:", price);
-    console.log("🚀 -----------------------------🚀");
+    const res = await response.json();
+
+    console.log("🚀 ~ insertBid ~ res:", res);
   };
   const insertAsk = async (data) => {
     const response = await fetch(`${host}/limitOrder`, {
@@ -111,13 +128,16 @@ const LimitOrder = () => {
       },
       body: JSON.stringify(data),
     });
-    const price = await response.json();
-    console.log("🚀 -----------------------------🚀");
-    console.log("🚀 ~ insertAsk ~ price:", price);
-    console.log("🚀 -----------------------------🚀");
+    const res = await response.json();
+    if(res.status==="fail"){
+      seterror(res.message)
+    }
+
   };
 
   const viewAsk = async (data) => {
+// will take coin name with params
+
     try {
       const response = await fetch(`${host}/viewAsk`, {
         method: "GET",
@@ -135,6 +155,8 @@ const LimitOrder = () => {
     }
   };
   const viewBid = async (data) => {
+// will take coin name with params
+
     try {
       const response = await fetch(`${host}/viewBid`, {
         method: "GET",
@@ -152,6 +174,8 @@ const LimitOrder = () => {
     }
   };
 
+ 
+
   if (coinSYML == null) {
     return <h1 class="text-red-700 text-4xl">No coin details found.</h1>;
   }
@@ -159,13 +183,13 @@ const LimitOrder = () => {
   return (
     <>
       {userData.user ? (
-        <div className="flex flex-col ">
+        <div className="flex flex-col bg-blue-100">
           <div className="flex flex-row justify-center items-center">
             <div className="container mx-auto p-4">
               <h2 className="text-2xl font-bold mb-4 text-center">
                 {coinSYML} Limit Order
               </h2>
-
+              <h3 className="text-red-500 font-bold text-center ">{error}</h3>
               <form className="max-w-md mx-auto">
                 <label htmlFor="usdtAmount" className="block mb-2">
                   Buy/Sell Price:
@@ -218,6 +242,7 @@ const LimitOrder = () => {
             <div className="Ask flex flex-col p-4 mt-2 rounded-lg h-60 overflow-auto bg-gradient-to-b from-red-400 to-red-600  w-1/7 max-w-5xl ">
               <table>
                 <thead>
+                  <th>User</th>
                   <th>Price</th>
                   <th>Amount</th>
                 </thead>
@@ -225,6 +250,7 @@ const LimitOrder = () => {
                   {Ask.map((item) => (
                     <>
                       <tr>
+                        <td class="pr-6">{item.username}</td>
                         <td>{item.price}</td>
                         <td>{item.Quantity}</td>
                       </tr>
@@ -236,6 +262,7 @@ const LimitOrder = () => {
             <div className="Bid flex flex-col bg-green-500 p-4 mt-2 rounded-lg h-60 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
               <table className="">
                 <thead>
+                <th >User </th>
                   <th>Price</th>
                   <th>Amount</th>
                 </thead>
@@ -243,6 +270,7 @@ const LimitOrder = () => {
                   {Bid.map((item) => (
                     <>
                       <tr>
+                      <td class="pr-6">{item.username}  </td>
                         <td>{item.price}</td>
                         <td>{item.Quantity}</td>
                       </tr>

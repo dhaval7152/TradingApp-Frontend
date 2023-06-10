@@ -40,7 +40,8 @@ export default function Home() {
           </span>
         </p>
         <button
-          onClick={() => navigate("/register")}
+        
+            onClick={() => userData.user ? navigate('/viewStocks') : navigate("/register")}
           className="bg-white text-purple-500 px-4 py-2 mt-4 rounded-full shadow-lg hover:bg-purple-500 hover:text-white transform transition-transform duration-500 hover:scale-110"
         >
           Get Started

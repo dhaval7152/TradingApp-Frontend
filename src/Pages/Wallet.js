@@ -5,7 +5,7 @@ import Accessdenied from "./Accessdenied";
 
 const WalletPage = () => {
   const data = useContext(DataContext);
-  const { host, username, userData, checkLoggedIn } = data;
+  const { host, username, userData } = data;
  
   const [usr, setusr] = useState("")
   const [balance, setBalance] = useState(0);
@@ -20,7 +20,8 @@ const WalletPage = () => {
     const data=window.localStorage.getItem('username')
     setusr(data)
     getUserBalAPi({username:usr})
-  }, [balance,upi,newFunds]);
+    console.log("Wallet useEffect");
+  }, [balance,upi,newFunds,usr]);
 
 
   const handleAddFunds = () => {
@@ -136,7 +137,7 @@ const WalletPage = () => {
         <div className="balance">
           <h1>
             <span className="bg-gradient-to-r from-red-500 to-blue-500 text-transparent bg-clip-text">
-              Available Balance:{balance}
+              Available Balance:${balance}
             </span>
           </h1>
         </div>
