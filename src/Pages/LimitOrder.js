@@ -9,7 +9,7 @@ const LimitOrder = () => {
 
   const [usdtAmount, setUsdtAmount] = useState("");
   const [Quantity, setQuntity] = useState(0);
-  const [error, seterror] = useState("")
+  const [error, seterror] = useState("");
   // const [username, setUsername] = useState("")
   const [price, setPrice] = useState(0);
 
@@ -21,33 +21,33 @@ const LimitOrder = () => {
 
   const [Ask, setAsk] = useState([]);
   const [Bid, setBid] = useState([]);
-  const [count,setCount]=useState("")
+  const [count, setCount] = useState("");
 
+  const [success, setsuccess] = useState("");
 
   useEffect(() => {
     const coindata = window.localStorage.getItem("coinsyml");
     const username = window.localStorage.getItem("username");
     setcoinSYML(coindata);
-    askBid()
-    viewAsk();
-    viewBid();
-    // viewAsk();
-    // viewBid();
-    console.log("🚀 ~Re-rendring useEffect",count)
+    askBid({ coinsyml: coindata });
+    viewAsk({ coinsyml: coindata }); //empty data return check
+    viewBid({ coinsyml: coindata });
+
+    console.log("viewAsk useEffect", { coinsyml: coindata });
+    console.log("viewBid useEffect", { coinsyml: coindata });
+
+    console.log("🚀 ~Re-rendring useEffect", count);
     // setUsername(username)
-  // }, [coin,Ask,Bid]);
-  },[count])
+    // }, [coin,Ask,Bid]);
+  }, [count]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
-  
+
   const handleBuy = (e) => {
     e.preventDefault();
-    setCount("hit Buy");
 
-    // console.log("🚀 ~ handleBuy ~ handleBuy:", handleBuy);
-    // console.log(order);
     insertBid({
       username: username,
       orderType: "Bid",
@@ -55,17 +55,11 @@ const LimitOrder = () => {
       price: order.price,
       Quantity: order.Quantity,
     });
-    // askBid();
-
+    setCount("hit Buy");
   };
   const handleSell = (e) => {
-
     e.preventDefault();
-   
-    // console.log("🚀 ----------------------------------------🚀");
-    // console.log("🚀 ~ handleSell ~ handleSell:", handleSell);
-    // console.log("🚀 ----------------------------------------🚀");
-    console.log(order);
+
     insertAsk({
       username: username,
       orderType: "Ask",
@@ -73,32 +67,48 @@ const LimitOrder = () => {
       price: order.price,
       Quantity: order.Quantity,
     });
-    // setCount(2);
     setCount("hit Sell");
-
-    // askBid();
   };
 
- 
-  const askBid = async () => {
-   
-   
-    // setCount(3);
-    setCount("hit askBid");
+  const askBid = async (data) => {
+    console.log("react askbid:", data);
+    viewAsk({ coinsyml: coinSYML }); //empty data return check
+    viewBid({ coinsyml: coinSYML });
+
+    setCount("hit askBid"); //useEffect hit
 
     const response = await fetch(`${host}/askBid`, {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(data),
     });
     const res = await response.json();
-    viewAsk();
-    viewBid();
-    // console.log("🚀 askBid----------------------🚀");
-    // console.log("🚀 ~ askBid ~ res:", res);
-    // console.log("🚀 askBid----------------------🚀");
+    viewAsk({ coinsyml: coinSYML }); //empty data return check
+    viewBid({ coinsyml: coinSYML });
+    console.log("viewAsk askBid", { coinsyml: coinSYML });
+    console.log("viewBid askBid", { coinsyml: coinSYML });
 
+    console.log("🚀 askBid----------------------🚀");
+    console.log("🚀 ~ askBid ~ res:", res);
+    console.log("🚀 askBid----------------------🚀");
+
+    if (res.status === "fail") {
+      if (res.message === "Ask And Bid data not Found") {
+        console.log("Ask And Bid data not Found");
+      } else {
+        seterror(res.message);
+      }
+      setTimeout(() => {
+        seterror("");
+      }, 5000);
+    } else if (res.status === "success") {
+      setsuccess("Order Completed");
+      setTimeout(() => {
+        setsuccess("");
+      }, 3500);
+    }
 
     // updatePrice(price.newPrice)
     console.log("calling Askbid");
@@ -129,52 +139,52 @@ const LimitOrder = () => {
       body: JSON.stringify(data),
     });
     const res = await response.json();
-    if(res.status==="fail"){
-      seterror(res.message)
+    if (res.status === "fail") {
+      seterror(res.message);
     }
-
   };
 
   const viewAsk = async (data) => {
-// will take coin name with params
+    // will take coin name with params
 
     try {
       const response = await fetch(`${host}/viewAsk`, {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(data),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
-      const data = await response.json();
-      setAsk(data);
+      const res = await response.json();
+      console.log(res);
+      setAsk(res);
     } catch (error) {
       console.error(error);
     }
   };
   const viewBid = async (data) => {
-// will take coin name with params
+    // will take coin name with params
 
     try {
       const response = await fetch(`${host}/viewBid`, {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(data),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
-      const data = await response.json();
-      setBid(data);
+      const res = await response.json();
+      setBid(res);
     } catch (error) {
       console.error(error);
     }
   };
-
- 
 
   if (coinSYML == null) {
     return <h1 class="text-red-700 text-4xl">No coin details found.</h1>;
@@ -190,6 +200,10 @@ const LimitOrder = () => {
                 {coinSYML} Limit Order
               </h2>
               <h3 className="text-red-500 font-bold text-center ">{error}</h3>
+             
+              <h3 className="text-green-700 font-bold text-center">
+                {success}
+              </h3>
               <form className="max-w-md mx-auto">
                 <label htmlFor="usdtAmount" className="block mb-2">
                   Buy/Sell Price:
@@ -240,16 +254,16 @@ const LimitOrder = () => {
           </div>
           <div className="flex flex-row justify-center items-center space-x-32">
             <div className="Ask flex flex-col p-4 mt-2 rounded-lg h-60 overflow-auto bg-gradient-to-b from-red-400 to-red-600  w-1/7 max-w-5xl ">
-              <table>
+              <table >
                 <thead>
                   <th>User</th>
                   <th>Price</th>
                   <th>Amount</th>
                 </thead>
-                <tbody className="text-lg">
+                <tbody className="text-lg border-t-2 border-gray-100">
                   {Ask.map((item) => (
                     <>
-                      <tr>
+                      <tr key={item.price} className="border-t-2 mb-2">
                         <td class="pr-6">{item.username}</td>
                         <td>{item.price}</td>
                         <td>{item.Quantity}</td>
@@ -262,15 +276,18 @@ const LimitOrder = () => {
             <div className="Bid flex flex-col bg-green-500 p-4 mt-2 rounded-lg h-60 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
               <table className="">
                 <thead>
-                <th >User </th>
+                  <th>User </th>
                   <th>Price</th>
                   <th>Amount</th>
                 </thead>
-                <tbody className="text-lg">
+                <tbody className="text-lg border border-gray-100">
                   {Bid.map((item) => (
                     <>
-                      <tr>
-                      <td class="pr-6">{item.username}  </td>
+                      <tr
+                        key={item.price}
+                        className="border-b-2  border-slate-300"
+                      >
+                        <td class="pr-6">{item.username} </td>
                         <td>{item.price}</td>
                         <td>{item.Quantity}</td>
                       </tr>

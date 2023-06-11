@@ -17,6 +17,7 @@ function Navbar() {
     if (storage) {
       localStorage.removeItem("auth-token");
       localStorage.removeItem("username");
+      localStorage.removeItem("coinsyml");
     }
     window.location.reload();
     navigate("/login");
@@ -91,11 +92,12 @@ function Navbar() {
               </ul>
             </div>
             <button
-              onClick={() => navigate("/Wallet")}
+              // onClick={() => navigate("/Wallet")}
               className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
             >
               <FaWallet className="mr-2" />
-              Wallet
+              <a href="/Wallet">Wallet</a>
+              
             </button>
 
             <Link
