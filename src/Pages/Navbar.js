@@ -19,7 +19,7 @@ function Navbar() {
       localStorage.removeItem("username");
       localStorage.removeItem("coinsyml");
     }
-    window.location.reload();
+    // window.location.reload();
     navigate("/login");
   };
   return (
@@ -69,34 +69,15 @@ function Navbar() {
                     Market Overview
                   </Link>
                 </li>
-                <li>
-                  {/* <Link
-                    to="/LimitOrder"
-
-                    class="bg-white  hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
-                    href="#"
-                  >
-                    Limit Order
-                  </Link> */}
-                </li>
-                {/* <li>
-                  <Link
-                   to="/viewStocks"
-
-                    class="rounded-b bg-white  hover:bg-slate-300 py-2 px-4 block whitespace-no-wrap"
-                    href="#"
-                  >
-                    Sell
-                  </Link>
-                </li> */}
+                
+             
               </ul>
             </div>
             <button
-              // onClick={() => navigate("/Wallet")}
               className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
             >
               <FaWallet className="mr-2" />
-              <a href="/Wallet">Wallet</a>
+              <Link to="/Wallet">Wallet</Link>
               
             </button>
 

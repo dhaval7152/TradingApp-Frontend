@@ -3,6 +3,8 @@ import DataContext from "../Context/dataContext";
 import Accessdenied from "./Accessdenied";
 
 const BuySellPage = () => {
+  document.title = "Buy | Sell";
+
   const data = useContext(DataContext);
   const { host, coin, username, userData } = data;
   const [coinSYML, setcoinSYML] = useState("");
@@ -15,18 +17,24 @@ const BuySellPage = () => {
   const [success, setsuccess] = useState("");
   const [count, setCount] = useState("");
 
+
+
   useEffect(() => {
     const data = window.localStorage.getItem("username");
     getUserBalAPi({ username: data });
-
     // checkLoggedIn()
     // window.localStorage.setItem('coin',JSON.stringify(coin))
     const coindata = window.localStorage.getItem("coinsyml");
+
     setcoinSYML(coindata);
-    console.log("Rendering", coin);
+    // console.log("Rendering", coin);
 
     console.log("Rendering Order useEffect", count);
     // }, [coin]);
+
+    // if(data!=username){
+    //   alert("User is Wrong,somethings is wrong!")
+    // }
   }, [count]);
 
   const calculateQuantity = () => {
@@ -51,6 +59,7 @@ const BuySellPage = () => {
     buyStockApi({ username, coinsyml: coin.coinsyml, Amount: usdtAmount });
     console.log({ username, coinsyml: coin.coinsyml, usdtAmount });
     setCount("Buy");
+
   };
   const handleSell = (e) => {
     console.log("🚀 ----------------------------------------🚀");
@@ -59,11 +68,13 @@ const BuySellPage = () => {
     e.preventDefault();
     sellStockApi({ username, coinsyml: coin.coinsyml, Amount: usdtAmount });
     setCount("Sell");
+
   };
 
   const handleAmountChange = (e) => {
     setUsdtAmount(e.target.value);
     setQuntity(e.target.value / coin.price);
+
   };
 
   const buyStockApi = async (data) => {
@@ -147,6 +158,7 @@ const BuySellPage = () => {
       console.error(error);
     }
   };
+ 
 
   if (coinSYML == null) {
     return <h1 class="text-red-700 text-4xl">No coin details found.</h1>;
@@ -157,7 +169,6 @@ const BuySellPage = () => {
       {userData.user ? (
         <div className="container mx-auto p-4">
           <h2 className="text-2xl font-bold mb-4">{coinSYML} Details</h2>
-
           <h3 className="text-red-700 font-bold text-center">{error}</h3>
           <h3 className="text-green-700 font-bold text-center">{success}</h3>
           <form className="max-w-md mx-auto">

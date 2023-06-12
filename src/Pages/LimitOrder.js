@@ -3,6 +3,8 @@ import DataContext from "../Context/dataContext";
 import Accessdenied from "./Accessdenied";
 
 const LimitOrder = () => {
+  document.title = "Limit Order";
+
   const data = useContext(DataContext);
   const { host, coin, userData, username } = data;
   const [coinSYML, setcoinSYML] = useState("");
@@ -29,7 +31,7 @@ const LimitOrder = () => {
     const coindata = window.localStorage.getItem("coinsyml");
     const username = window.localStorage.getItem("username");
     setcoinSYML(coindata);
-    askBid({ coinsyml: coindata });
+    // askBid({ coinsyml: coindata });
     viewAsk({ coinsyml: coindata }); //empty data return check
     viewBid({ coinsyml: coindata });
 
@@ -56,6 +58,9 @@ const LimitOrder = () => {
       Quantity: order.Quantity,
     });
     setCount("hit Buy");
+    askBid({ coinsyml: coinSYML });
+    askBid({ coinsyml: coinSYML }); //need
+
   };
   const handleSell = (e) => {
     e.preventDefault();
@@ -71,6 +76,7 @@ const LimitOrder = () => {
   };
 
   const askBid = async (data) => {
+    
     console.log("react askbid:", data);
     viewAsk({ coinsyml: coinSYML }); //empty data return check
     viewBid({ coinsyml: coinSYML });
@@ -96,7 +102,7 @@ const LimitOrder = () => {
 
     if (res.status === "fail") {
       if (res.message === "Ask And Bid data not Found") {
-        console.log("Ask And Bid data not Found");
+        return null;
       } else {
         seterror(res.message);
       }
@@ -104,13 +110,12 @@ const LimitOrder = () => {
         seterror("");
       }, 5000);
     } else if (res.status === "success") {
-      setsuccess("Order Completed");
+      setsuccess("Order Completed",res.message);
       setTimeout(() => {
         setsuccess("");
       }, 3500);
     }
 
-    // updatePrice(price.newPrice)
     console.log("calling Askbid");
   };
 

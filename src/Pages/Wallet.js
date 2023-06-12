@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Accessdenied from "./Accessdenied";
 
 const WalletPage = () => {
+  document.title = "Wallet";
+
   const data = useContext(DataContext);
   const { host, username, userData } = data;
  

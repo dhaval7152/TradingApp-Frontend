@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Accessdenied from "./Accessdenied";
 
 export default function Portfolio() {
+  document.title = "Portfolio";
+
   const data = useContext(DataContext);
   const { host, username, checkLoggedIn, userData, coins } = data;
 
