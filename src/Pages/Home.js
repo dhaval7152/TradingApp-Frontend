@@ -25,8 +25,8 @@ export default function Home() {
     <>
       <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 flex flex-col justify-center items-center">
         <header className="text-white text-4xl font-bold mb-8">
-          <span className="inline-block animate-bounce">Welcome</span> to the
-          Crypto Trading App
+          <span className="inline-block animate-bounce">Welcome</span> to 
+          TradePro
         </header>
         <img
           src="https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg"

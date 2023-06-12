@@ -260,7 +260,7 @@ const LimitOrder = () => {
                   <th>Price</th>
                   <th>Amount</th>
                 </thead>
-                <tbody className="text-lg border-t-2 border-gray-100">
+                <tbody className="text-lg border-t-2 border-gray-50">
                   {Ask.map((item) => (
                     <>
                       <tr key={item.price} className="border-t-2 mb-2">
