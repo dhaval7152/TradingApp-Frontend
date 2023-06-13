@@ -31,7 +31,7 @@ const LimitOrder = () => {
     const coindata = window.localStorage.getItem("coinsyml");
     const username = window.localStorage.getItem("username");
     setcoinSYML(coindata);
-    // askBid({ coinsyml: coindata });
+    askBid({ coinsyml: coindata });
     viewAsk({ coinsyml: coindata }); //empty data return check
     viewBid({ coinsyml: coindata });
 
@@ -57,9 +57,9 @@ const LimitOrder = () => {
       price: order.price,
       Quantity: order.Quantity,
     });
-    setCount("hit Buy");
-    askBid({ coinsyml: coinSYML });
-    askBid({ coinsyml: coinSYML }); //need
+    setCount("hit Buy");  
+    // askBid({ coinsyml: coinSYML }); //need
+    // askBid({ coinsyml: coinSYML }); //need
 
   };
   const handleSell = (e) => {
@@ -81,7 +81,7 @@ const LimitOrder = () => {
     viewAsk({ coinsyml: coinSYML }); //empty data return check
     viewBid({ coinsyml: coinSYML });
 
-    setCount("hit askBid"); //useEffect hit
+    // setCount("hit askBid"); //useEffect hit
 
     const response = await fetch(`${host}/askBid`, {
       method: "POST",
@@ -115,6 +115,8 @@ const LimitOrder = () => {
         setsuccess("");
       }, 3500);
     }
+    setCount("hit askBid"); //useEffect hit
+
 
     console.log("calling Askbid");
   };

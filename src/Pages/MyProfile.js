@@ -116,7 +116,8 @@ const ProfilePage = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+          // className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+          className="bg-gradient-to-r from-indigo-500 via-sky-400 to-sky-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
         >
           Update
         </button>

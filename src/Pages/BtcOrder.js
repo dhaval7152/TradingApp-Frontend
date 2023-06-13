@@ -2,12 +2,12 @@ import { useState, useContext, useEffect, useRef } from "react";
 import DataContext from "../Context/dataContext";
 import Accessdenied from "./Accessdenied";
 
-const BuySellPage = () => {
+export default function BtcOrder () {
   document.title = "Buy | Sell";
   const formRef = useRef();
 
   const data = useContext(DataContext);
-  const { host, coin, username, userData } = data;
+  const { host, coin, username, userData,buyCoin } = data;
   const [coinSYML, setcoinSYML] = useState("");
   const [balance, setBalance] = useState(0);
   const [newFunds, setNewFunds] = useState(0);
@@ -22,9 +22,7 @@ const BuySellPage = () => {
 
   useEffect(() => {
     const data = window.localStorage.getItem("username");
-    getUserBalAPi({ username: data });
-    // checkLoggedIn()
-    // window.localStorage.setItem('coin',JSON.stringify(coin))
+    getBtcBalance({ username: data });
     const coindata = window.localStorage.getItem("coinsyml");
 
     setcoinSYML(coindata);
@@ -57,9 +55,11 @@ const BuySellPage = () => {
     console.log("🚀 -------------------------------------🚀");
     console.log("🚀 ~ handleBuy ~ handleBuy:", handleBuy);
     console.log("🚀 -------------------------------------🚀");
-    buyStockApi({ username, coinsyml: coin.coinsyml, Amount: usdtAmount });
-    console.log({ username, coinsyml: coin.coinsyml, usdtAmount });
-    setCount("Buy");
+    // buyStockApi({ username, coinsyml: coin.coinsyml, Amount: usdtAmount });
+    swapBuyApi({ username, Fromcoinsyml: buyCoin.coinsyml,Tocoinsyml:"xrp",ToPrice:0.00007142857142857143, Amount: usdtAmount});
+
+    console.log({ username, Fromcoinsyml: buyCoin.coinsyml,Tocoinsyml:"xrp",ToPrice:0.00007142857142857143, Amount: usdtAmount,});
+    setCount("swapBuyApi");
     formRef.current.reset();
 
 
@@ -78,23 +78,24 @@ const BuySellPage = () => {
 
   const handleAmountChange = (e) => {
     setUsdtAmount(e.target.value);
-    setQuntity(e.target.value / coin.price);
+    // {1 / (buyCoin.price / coin.price) }
+    // setQuntity(e.target.value / coin.price);
+    setQuntity(e.target.value / (1 / (buyCoin.price / coin.price)));
 
   };
 
-  const buyStockApi = async (data) => {
-    console.log("calling buyStockApi");
-    const response = await fetch(`${host}/buyStock`, {
+  const swapBuyApi = async (data) => {
+    console.log("calling swapBuyApi");
+    const response = await fetch(`${host}/swapBuy`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      // Provide all values to registerUser
       body: JSON.stringify(data),
     });
     const res = await response.json();
     console.log("🚀 -------------------🚀");
-    console.log("🚀 ~ buyStockApi ~ res:", res);
+    console.log("🚀 ~ swapBuyApi ~ res:", res);
     console.log("🚀 -------------------🚀");
 
     if (res.status === "failed") {
@@ -112,53 +113,54 @@ const BuySellPage = () => {
       // navigate("/");
     }
   };
-  const sellStockApi = async (data) => {
-    console.log("sellStockApi", data);
-    console.log("calling loginApi");
-    const response = await fetch(`${host}/sellStock`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // Provide all values to registerUser
-      body: JSON.stringify(data),
-    });
-    const res = await response.json();
-    console.log("🚀 -------------------🚀");
-    console.log("🚀 ~ sellStockApi ~ res:", res);
-    console.log("🚀 -------------------🚀");
 
-    if (res.status === "failed") {
-      seterror(res.message);
-      // alert(res.message)
-    } else {
-      seterror("");
-      setsuccess(res.message);
-      setTimeout(() => {
-        setsuccess("");
-      }, 3000);
-      // alert("sold");
-    }
-  };
+  // const sellStockApi = async (data) => {
+  //   console.log("sellStockApi", data);
+  //   console.log("calling loginApi");
+  //   const response = await fetch(`${host}/sellStock`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     // Provide all values to registerUser
+  //     body: JSON.stringify(data),
+  //   });
+  //   const res = await response.json();
+  //   console.log("🚀 -------------------🚀");
+  //   console.log("🚀 ~ sellStockApi ~ res:", res);
+  //   console.log("🚀 -------------------🚀");
 
-  const getUserBalAPi = async (data) => {
-    console.log("🚀 ~ getUserBalAPi ~ getUserBalAPi:");
+  //   if (res.status === "failed") {
+  //     seterror(res.message);
+  //     // alert(res.message)
+  //   } else {
+  //     seterror("");
+  //     setsuccess(res.message);
+  //     setTimeout(() => {
+  //       setsuccess("");
+  //     }, 3000);
+  //     // alert("sold");
+  //   }
+  // };
+
+  const getBtcBalance = async (data) => {
+    console.log("🚀 ~ getBtcBalance ~ getBtcBalance:");
     try {
-      const response = await fetch(`${host}/getUserBalance`, {
+      const response = await fetch(`${host}/getBtcBalance`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-      if (response.status === "failed") {
+      if (response.status === "fail") {
         alert(response.message);
       }
       const res = await response.json();
       console.log("🚀 -------------------------------🚀");
-      console.log("🚀 ~ getUserBalAPi ~ data:", res);
+      console.log("🚀 ~ getBtcBalance ~ data:", res);
       console.log("🚀 -------------------------------🚀");
-      setBalance(res.balance);
+      setBalance(res.Quantity);
     } catch (error) {
       console.error(error);
     }
@@ -173,12 +175,12 @@ const BuySellPage = () => {
     <>
       {userData.user ? (
         <div className="container mx-auto p-4">
-          <h2 className="text-2xl font-bold mb-4">{coinSYML} Details</h2>
-          <h3 className="text-red-700 font-bold text-center animate-pulse">{error}</h3>
+          <h2 className="text-2xl font-bold mb-4">{coinSYML} Details-{(1 / (buyCoin.price / coin.price))}</h2>
+          <h3 className="text-red-700 font-bold text-center">{error}</h3>
           <h3 className="text-green-700 font-bold text-center">{success}</h3>
           <form  className="max-w-md mx-auto" ref={formRef}>
             <label htmlFor="usdtAmount" className="block mb-2">
-              USDT Amount:
+              {buyCoin.coinsyml} Amount:
             </label>
             <input
               type="number"
@@ -236,4 +238,3 @@ const BuySellPage = () => {
   );
 };
 
-export default BuySellPage;

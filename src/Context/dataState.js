@@ -8,7 +8,7 @@ const DataState = (props) => {
   const host = env.host;
   const url = env.host;
 
-  const [coins, setcoins] = useState([])
+  // const [coins, setcoins] = useState([])
   
   const [credentials, setCredentials] = useState({
     username: "",
@@ -16,6 +16,7 @@ const DataState = (props) => {
   });
   
   const [coin, setCoin] = useState({});
+  const [buyCoin, setbuyCoin] = useState({});
 
   const [Register, setRegister] = useState({
     username: "",
@@ -110,6 +111,7 @@ const DataState = (props) => {
         setUsername,
         coin,
         setCoin,
+        buyCoin,setbuyCoin,
         // coins,setcoins
       }}
     >

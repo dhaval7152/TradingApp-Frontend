@@ -5,26 +5,22 @@ import Accessdenied from "./Accessdenied";
 
 export default function Portfolio() {
   document.title = "Portfolio";
-
+  let cp;
+  let dif;
+  let percentage;
   const data = useContext(DataContext);
-  const { host, username, checkLoggedIn, userData, coins } = data;
+  const { host, username, checkLoggedIn, userData } = data;
 
   const navigate = useNavigate();
   const [usr, setusr] = useState("");
+  const [coins, setcoins] = useState([]);
+
   const [portfolio, setportfolio] = useState([]);
 
-  // useEffect(() => {
-  //   viewPortfolioApi({username})
-  //   console.log("hitting viewPortfolioApi ");
-  //   checkLoggedIn()
-
-  // }, [])
-
   useEffect(() => {
-    // checkLoggedIn()
     const data = window.localStorage.getItem("username");
     setusr(data);
-    // viewPortfolioApi({username})
+    viewStockApi();
     viewPortfolioApi({ username: data });
   }, [username]);
 
@@ -52,24 +48,44 @@ export default function Portfolio() {
       console.error(error);
     }
   };
+  const viewStockApi = async () => {
+    try {
+      const response = await fetch(`${host}/viewStocks`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data = await response.json();
+      setcoins(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
       {userData.user ? (
         <div className="flex justify-center">
+          {console.log(coins)}
           <div className="bg-gradient-to-b from-blue-500 to-black py-4 px-6 rounded-lg w-full max-w-5xl mt-10">
             <h2 className="text-xl font-bold mb-4 text-center text-white">
               Portfolio
             </h2>
             <table className="w-full">
               <thead>
-                <tr className="bg-gradient-to-r from-blue-200 via-white to-black text-gray-900">
-                  <th className="py-2 px-4">Coin Name</th>
+                <tr className="bg-gradient-to-r from-blue-200 via-white to-blue  text-black">
+                  <th className="py-2 px-4">Coin</th>
                   <th className="py-2 px-4">Quantity</th>
                   <th className="py-2 px-4">Buy Price</th>
                   <th className="py-2 px-4">Purchase Total</th>
                   <th className="py-2 px-4">Current Price</th>
-                  <th className="py-2 px-4 text-gray-400">Profit/Loss</th>
+                  <th className="py-2 px-4 ">
+                    Profit/Loss(cp * qunt) - buyvalue
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -99,15 +115,55 @@ export default function Portfolio() {
                           item.Quantity === 0 ? "bg-red-200" : "bg-blue-100"
                         }
                       >
-                        <td className="py-2 px-4">{item.coinsyml}</td>
+                        {coins.map((coin) => {
+                          if (coin.coinsyml == item.coinsyml) {
+                            console.log(coin.price);
+                            cp = coin.price;
+                          }
+                          dif = (
+                            cp * item.Quantity -
+                            item.buyPrice * item.Quantity
+                          ).toFixed(2);
+                          percentage = (
+                            cp * item.Quantity -
+                            item.buyPrice * item.Quantity * 1
+                          ).toFixed(2);
+                        })}
+
+
+                        <td className="py-2 px-4 font-semibold">{item.coinsyml}</td>
                         <td className="py-2 px-4">{item.Quantity}</td>
                         <td className="py-2 px-4">{item.buyPrice}</td>
                         <td className="py-2 px-4">
                           {item.buyPrice * item.Quantity}
                         </td>
+
                         {/* <td className="py-2 px-4">${item.value}</td> */}
-                        <td className="py-2 px-4">currentPrice</td>
-                        <td className="py-2 px-4">(cp * qunt) - buyvalue</td>
+                        <td className="py-2 px-4">{cp}</td>
+                        {/* {coins.map((coin)=>{
+                          if(coin.coinsyml==item.coinsyml){
+                            console.log(coin.price);
+                            cp=coin.price
+
+                          } 
+                          dif=(cp * item.Quantity - item.buyPrice * item.Quantity).toFixed(2) 
+                      percentage=((cp * item.Quantity )- (item.buyPrice * item.Quantity) * 1).toFixed(2) 
+
+                          
+                          
+                          
+                        })} */}
+                        {/* <td className="py-2 px-4" id="profitLoss" >{(item.buyPrice * item.Quantity) - cp*item.Quantity } (cp * qunt) - buyvalue</td> */}
+                        <td
+                          className={`py-2 px-4  font-semibold ${
+                            dif > 0 ? "text-green-500" : "text-red-700"
+                          }`}
+                          id="profitLoss"
+                        >
+                          {/* {dif=(cp * item.Quantity - item.buyPrice * item.Quantity).toFixed(2) 
+                          } */}
+                          {dif}({percentage}%)
+                        </td>
                       </tr>
                     ))}
                   </>

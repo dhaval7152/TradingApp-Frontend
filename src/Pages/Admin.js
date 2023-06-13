@@ -5,6 +5,11 @@ export default function Admin() {
   const data = useContext(DataContext);
   const { host,username } = data;
 
+
+  const [error, seterror] = useState("");
+  const [success, setsuccess] = useState("");
+
+
   const [Stock, setStock] = useState({
       coinsyml:"NaN",
       CoinkName:"NaN",
@@ -31,6 +36,21 @@ export default function Admin() {
       body: JSON.stringify(data),
     });
     const res = await response.json();
+    if(res.status==="fail"){
+      seterror(res.message)
+      setTimeout(() => {
+        seterror("")
+      }, 5000);
+    }
+    else{
+      setsuccess(res.message)
+      setTimeout(() => {
+        setsuccess("")
+
+      }, 3000);
+    }
+
+
     console.log("🚀 ------------------------🚀")
     console.log("🚀 ~ addStock ~ res:", res)
     console.log("🚀 ------------------------🚀")
@@ -44,6 +64,9 @@ export default function Admin() {
         <div class="bg-white py-6 px-10 sm:max-w-md w-full rounded-lg">
           <div class="sm:text-3xl text-2xl font-semibold text-center text-sky-600  mb-12">
             List Stock
+    
+          <h1 className="text-red-200 text-lg text-center">{error}</h1>
+          <h1 className="text-green-300 text-lg text-center">{success}</h1>
           </div>
           <div class="">
             <div>

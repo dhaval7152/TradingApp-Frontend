@@ -16,6 +16,8 @@ import Accessdenied from "./Pages/Accessdenied";
 import DataContext from "./Context/dataContext";
 import Admin from "./Pages/Admin";
 import LimitOrder from "./Pages/LimitOrder";
+import BtcViewStocks from "./Pages/BtcViewStocks";
+import BtcOrder from "./Pages/BtcOrder";
 function App() {
 
   const data = useContext(DataContext);
@@ -46,6 +48,12 @@ function App() {
           </Routes>
           <Routes>
             <Route  path="/viewStocks" element={<ViewStock/>} />
+          </Routes>
+          <Routes>
+            <Route  path="/BtcViewStocks" element={<BtcViewStocks/>} />
+          </Routes>
+          <Routes>
+            <Route  path="/BtcOrder" element={<BtcOrder/>} />
           </Routes>
           <Routes>
             <Route path="/order" element={<Order/>} />
