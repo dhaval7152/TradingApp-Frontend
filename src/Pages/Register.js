@@ -210,7 +210,7 @@ export default function Register() {
               name="password"
               onChange={handleOnchange}
               placeholder="Enter your Password"
-              onKeyUp={handleOnSubmit}
+              // onKeyUp={handleOnSubmit}
               class="text-sm
               placeholder-gray-500
               pl-10

@@ -61,8 +61,8 @@ export default function ViewStocks() {
   return (
     <>
       {userData.user ? (
-        <div className="main m-14">
-          <div className="container mx-auto">
+        <div className="main m-14 ">
+          <div className="container mx-auto ">
             <h1 className="text-4xl font-bold text-center my-8  ">
               <span className="bg-gradient-to-r from-yellow-600 to-pink-900 text-transparent bg-clip-text">
                 Crypto Dashboard
